@@ -15,12 +15,12 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
 
 ;keywords
       ;minerr  output variable with error of the minimum time, method by Deeg+ 2020
-      ;kvwminerr  output variable with error of the minimum time, original calculation by KvW 1956
+      ;kvwminerr  output variable with error of the minimum time, original method by KvW 1956
       ;nfold   number of foldings on which to perform pairings of flux values, default=5
       ;rms     average measurement error of individual flux values (in units of the flux values)
       ;notimeoff  disables internal offsetting of time values. Is save to use if eclipse min-time is within +-0.1
       ;init_minflux  if set, uses as initial min-time estimate the value of lowest flux (instead of 
-      ;the middle of the input lightcurve)
+      ;      the middle of the input lightcurve)
      ;noplot  supresses plots
       ;noprint supresses all printing
       ;errflag  flag with error-codes. 0: OK, bit 1: data not equidistant spaced
@@ -30,7 +30,8 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
 ;  24jan2020   introduced internal offset of input times by value of central time-point (floored to first digit) to avoid numerical
 ;               problems with polyfit on large time-values (even values close to 1 are problematic!). Also new kw notimeoff 
 ;  31jul2020   added errflag as output. For now only indicates if data aren't equidistant within 1%
-;   5aug2020   added kw init_minflux. The default for the initial min-time estimate is now the middle of input lc (better for noisy data)
+;   5aug2020   added init_minflux kw. The default for the initial min-time estimate is now the middle of input lc (better for noisy data)
+;  17nov2020  replaced int() function calls with fix() 
 
 
 
@@ -91,7 +92,7 @@ if keyword_set(init_minflux) then minflux=min(flux, minid)   ;use as preliminary
 
 
   noffr=(nfold-1)/4.            ;max offset in folding indices around minid 
-  noff=int(noffr)    
+  noff=fix(noffr)    
 
 
   minfoldid=minid-noff          ;min and max of IDs on which we fold (integer numbers)
@@ -115,7 +116,7 @@ if keyword_set(init_minflux) then minflux=min(flux, minid)   ;use as preliminary
   for segid=0,nfold-1 do begin               ;main loop performing foldings
      foldidf[segid]= minid-noffr+segid/2.    ;fractional foldid:  mindid-noff, mindid-noff+0.5,..minid,..mindid+noff-0.5, mindid+noff
      if debug then print,'folding on ',foldidf[segid]
-     foldidi = int(foldidf[segid]+0.0001) ; integer value of foldid
+     foldidi = fix(foldidf[segid]+0.0001) ; integer value of foldid
      S[segid]=0.
      if abs (foldidf[segid] - foldidi )  le 0.01 then begin ; foldidf  is integer (folding on a point)         
         for i=1,Z do begin
@@ -138,8 +139,8 @@ if keyword_set(init_minflux) then minflux=min(flux, minid)   ;use as preliminary
   
 ;define a linear transformation between the values of foldidf and time: time = atr + btr * foldidf
 ;this could also be done between time and its own indices, but is prone to errors if there is some missing data-point 
-  minidf=int(foldidf[0])        ;get next integer below and above the range of foldidf
-  maxidf=int(foldidf[-1]+0.50001)
+  minidf=fix(foldidf[0])        ;get next integer below and above the range of foldidf
+  maxidf=fix(foldidf[-1]+0.50001)
   ntimef=maxidf-minidf          ;number of pts of timef
   btr = (time[maxidf]-time[minidf])/ntimef
   atr = time[minidf]- btr*minidf
