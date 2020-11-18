@@ -7,8 +7,8 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, r
 ;be dominated by flux measurement errors. For details on error calculation, see Deeg+ 2020. 
 ;Data-points that are equidistant in time are required. 
 ;
-;kvwcor.pro is a plugin replacement for kvw.pro in which non-essential code for 
-; graphics and printing output and the notimeoff option have been removed.
+;kvwcor.pro is a plugin replacement for kvw.pro in which non-essential code (options for graphics, printing, debugging, time-offset)
+;has been removed
   
 ;input 
                                 ;time   vector with time values in ascending order
