@@ -24,7 +24,7 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
                                 ;noplot  supresses plots
                                 ;noprint supresses all printing
                                 ;errflag  flag with error-codes. 0: OK, bit 1: data not equidistant spaced
-                                ;debug   debugging flag that causes  printing of lots of stuff 
+                                ;debug   debugging flag. If 1, prints some, if 2, prints lots of stuff 
   
 ;HJD 19nov2019 initial version
 ;  24jan2020   introduced internal offset of input times by value of central time-point (floored to first digit) to avoid numerical
@@ -33,6 +33,7 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
 ;   5aug2020   added init_minflux kw. The default for the initial min-time estimate is now the middle of input lc (better for noisy data)
 ;  17nov2020  replaced int() function calls with fix() 
 ;  18nov2020  uses now linfit() for linear transform between foldidf and time (more robust against scatter in time vs foldidf)
+;  30nov2020  replaced isa() with keyword_set() statements. Added some debug/diagnostics stuff
 
 
 ;COPYRIGHT (C) 2020 Hans J. Deeg;   
@@ -57,7 +58,7 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
 ;----------------------------------
 
   errflag=0
-  if ~isa(nfold) then nfold = 5 ; default number of foldings
+  if ~keyword_set(nfold) then nfold = 5 ; default number of foldings
   npts=n_elements(time)
   minid=npts/2                          ;ID of approximate center (and minimum) of lc
   if ~keyword_set(notimeoff) then begin ;offset times by value of central pt (lowered to preceeding increment of 0.1 )
@@ -70,8 +71,8 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
      xtitlestr='time'
   endelse
 
-  if ~isa(debug) then debug =0  ;debugflag
-  if debug then begin
+  if ~keyword_set(debug) then debug =0  ;debugflag
+  if debug eq 2 then begin
      for i=0,npts-1 do begin
         print,i, flux[i]
      endfor
@@ -104,7 +105,7 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
   maxpid=maxfoldid+Z
 
 
-  if debug then print,'points considered in pairings:',minpid, ' to ',maxpid
+  if debug eq 2 then print,'points considered in pairings:',minpid, ' to ',maxpid
   if  ~keyword_set(noplot) then p1=plot(time[minpid:maxpid],flux[minpid:maxpid],'+',/over)
   if debug then  print,'Z: ' ,Z
   if Z lt 3 then message,'Error: Less than 3 points in in/egress can be paired. Decrease nfold parameter or provide more datapoints for in- or egress'
@@ -115,27 +116,27 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
   foldidf=fltarr(nfold)
   for segid=0,nfold-1 do begin               ;main loop performing foldings
      foldidf[segid]= minid-noffr+segid/2.    ;fractional foldid:  mindid-noff, mindid-noff+0.5,..minid,..mindid+noff-0.5, mindid+noff
-     if debug then print,'folding on ',foldidf[segid]
+     if debug eq 2 then print,'folding on ',foldidf[segid]
      foldidi = fix(foldidf[segid]+0.0001) ; integer value of foldid
      S[segid]=0.
      if abs (foldidf[segid] - foldidi )  le 0.01 then begin ; foldidf  is integer (folding on a point)         
         for i=1,Z do begin
            idlo=foldidi-i
            idhi=foldidi+i
-           if debug then print,'even',idlo,idhi
+           if debug eq 2 then print,'even',idlo,idhi
            S[segid] +=(flux[idlo]-flux[idhi])^2
         endfor
      endif else begin           ;foldidf is int.+half (folding between points)
         for i=1,Z do begin
            idlo=foldidi-i+1
            idhi=foldidi+i
-           if debug then print,'odd',idlo,idhi
+           if debug eq 2 then print,'odd',idlo,idhi
            S[segid] +=(flux[idlo]-flux[idhi])^2
         endfor
      endelse
   endfor
-  if debug then print,'foldidf', foldidf
-  if debug then print,'      S',S
+  if debug eq 2 then print,'foldidf', foldidf
+  if debug eq 2 then print,'      S',S
   
 ;define a linear transformation between the values of foldidf and time: time = cl[0] + cl[1] * foldidf
   minidf=fix(foldidf[0])        ;get next integer below and above the range of foldidf (spans at least 3 integers)
@@ -185,25 +186,35 @@ function kvw, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=r
 
   mintim=-cp[1]/(2.*cp[2])  +time0                             ;eq 3 from KvW56
   kvwminerr=sqrt((4*cp[2]*cp[0]-cp[1]^2)/(4*cp[2]^2*(Z-1)))    ;eq 4 from KvW56   ;original error calc
-  if debug then print,format='(a,f14.6,a,f8.6)','mintim_org: ',mintim,'+-',kvwminerr
+  if debug then print,format='(a,f10.6)','cp[0] orig: ',cp[0]
+  if debug then print,format='(a,f15.7,a,f9.7)','mintim_org: ',mintim,'+-',kvwminerr
+  if debug then begin
+     minS_org = cp[0]-cp[1]^2/(4*cp[2])                            ;min value of fitted parabole; eq. 2 from KvW
+     cp0org=cp[0]
+     print,'minS_org:   ',minS_org
+  endif
+
 
 ;determine flux-rms if not supplied by kw 
   if ~(keyword_set(rms)) then begin   
      rms=sqrt(min(S)/(2*(Z-1))) ;automatic rms determination from lowest S at any folding
-     if ~isa(noprint) then print,'KVW: flux-rms from best folding: ',rms
+     if ~keyword_set(noprint) then print,'KVW: flux-rms from best folding: ',rms
   endif
 
 ;revised calculation of timing error
-  cp[0]=(Z-1)*2*rms^2 +cp[1]^2/(4*cp[2])                    ;recalc cp[0] so that minS = (Z-1)*2*rms 
-  minerr=sqrt((4*cp[2]*cp[0]-cp[1]^2)/(4*cp[2]^2*(Z-1)))    ;eq 4 from KvW56
-  
-  if ~isa(noprint) then print,format='(a,f14.6,a,f8.6)','KVW: mintime: ',mintim,'+-',minerr
+  cp[0]=(Z-1)*2*rms^2 +cp[1]^2/(4*cp[2])                    ;recalc cp[0] so that minS = (Z-1)*2*rms^2 
+
+  minerr=sqrt((4*cp[2]*cp[0]-cp[1]^2)/(4*cp[2]^2*(Z-1)))    ;eq 4 from KvW56   ;using revised cp[0]
+  if debug then print,format='(a,f10.6)','cp[0] recalcd: ',cp[0] 
+  if ~keyword_set(noprint) then print,format='(a,f15.7,a,f9.7)','KVW: mintime: ',mintim,'+-',minerr
 
   if debug then begin
      print,'minerr_alt: ',rms*sqrt(2/cp[2])                    ;alternative eq. for minerr (my eq 8)
      minS = cp[0]-cp[1]^2/(4*cp[2])                            ;min value of fitted parabole; eq. 2 from KvW
-     print,'min S:   ',minS
+     print,'minS:   ',minS
+     print,'cp[0] -cp[0]org or minS-minSorg',cp[0]-cp0org
      print,'min chi^2: ',minS / (2.*rms^2) ;min value in chi^2 
   endif
+;stop
   return,mintim
 end
