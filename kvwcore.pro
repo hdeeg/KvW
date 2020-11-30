@@ -32,7 +32,9 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, r
 ;   5aug2020   added init_minflux kw. The default for the initial min-time estimate is now the middle of input lc (better for noisy data)
 ;  17nov2020  replaced int() function calls with fix() 
 ;  18nov2020  uses now linfit() for linear transform between foldidf and time (more robust against scatter in time vs foldidf)
-;  18nov2020  kvwcore.pro generated as a branch from kvw.pro
+;  18nov2020  kvwcore.pro generated from kvw.pro
+;  30nov2020  replaced isa() with keyword_set() statements, similar to today's version of kvw.pro
+
 
 ;COPYRIGHT (C) 2020 Hans J. Deeg;   
 ;    This program is free software; you can redistribute it and/or modify
@@ -56,7 +58,7 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, r
 ;----------------------------------
 
   errflag=0
-  if ~isa(nfold) then nfold = 5 ; default number of foldings
+  if ~keyword_set(nfold) then nfold = 5 ; default number of foldings
 
   npts=n_elements(time)
   minid=npts/2                               ;ID of approximate center (and minimum) of lc
