@@ -49,7 +49,7 @@ From `CMDra7024.lc,` the demos generate also Fig. 1 and the first entry in Table
 	- Primary eclipse at epoch 7024. 
 	- Incomplete primary at epoch 7023;
 	
-	Both lightcurves were extracted from PDCSAP_FLUX of nfile `tess2019253231442-s0016-0000000199574208-0152-s_lc.fits`, available on NASA's MAST and processed as described in the paper (Deeg 2020).
+	Both lightcurves were extracted from the PDCSAP_FLUX of the file `tess2019253231442-s0016-0000000199574208-0152-s_lc.fits`, available on NASA's MAST and processed as described in the paper (Deeg 2020).
 
 - `*.lc`  Further lightcurves used in tests during development.
 	
