@@ -1,29 +1,33 @@
-function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, rms=rms,  init_minflux=init_minflux, errflag=errflag
+function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr,  init_minflux=init_minflux, rms=rms,  nfold=nfold, errflag=errflag
   
-;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error calc by Deeg+2020
-;By default, the min-time is derived from 5 pairings that fold at i-1,i-0.5,i,i+0.5,i+1, where i is the index of the point of minimum 
-; flux. This number can be modified with the nfold keyword (The origninal KvW algorithms uses nfold=3)
-;If flux rms is known, it should be supplied by keyword rms. Else, rms is estimated from S of best flux-pairing, which is assumed to 
-;be dominated by flux measurement errors. For details on error calculation, see Deeg+ 2020. 
-;Data-points that are equidistant in time are required. 
-;
 ;kvwcor.pro is a plugin replacement for kvw.pro in which non-essential code (options for graphics, printing, debugging, time-offset)
 ;has been removed
+
+;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error, following Deeg 2020 (Galaxies, vol. 9, issue 1, p. 1)
+;Data-points that are equidistant in time are required and the lightcurve should only contain the eclipse (no off-eclipse data).
+;For the initial guess of the minimum time, two options are given, controlled by the keyword init_minflux : By default (init_minflux=0), the middle of 
+;the lightcurve is assumed. Else (init_minflux=1), the time of the flux-minimum is used. This option is fine or preferential for low-noise lightcurves showing 
+;a clear flux-mimimum not extending over more than 2-3 points. 
+;If the rms (point-to-point noise) of the off-eclipse flux is known, it should be supplied by keyword rms. Else, rms is estimated from S of the best 
+; flux-pairing, which is assumed to be dominated by flux measurement errors. For details on calculation of that rms, see Deeg 2020. 
+;By default, the time of minimum is derived from 5 pairings (nfold paramter) that fold at i-1,i-0.5,i,i+0.5,i+1, where i is the index of the point of minimum 
+; flux. The original KvW algorithm uses nfold=3.
+  
   
 ;input 
                                 ;time   vector with time values in ascending order
                                 ;flux   vector with corresponding flux values
 ;output 
-                                ;  time of mimimum
+                                ;time of mimimum
 
 ;keywords
-                                ;minerr  output variable with error of the minimum time, method by Deeg+ 2020
-                                ;kvwminerr  output variable with error of the minimum time, original method by KvW 1956
-                                ;nfold   number of foldings on which to perform pairings of flux values, default=5
-                                ;rms     average measurement error of individual flux values (in units of the flux values)
-                                ;init_minflux  if set, uses as initial min-time estimate the value of lowest flux (instead of 
-                                ;      the middle of the input lightcurve)
-                                ;errflag  flag with error-codes. 0: OK, bit 1: data not equidistant spaced
+                                ;minerr  output: error of the minimum time, method by Deeg+ 2020
+                                ;kvwminerr  output: error of the minimum time, original method by KvW 1956
+                                ;init_minflux input: By default, the middle of the lightcurve is used as
+                                ;        intial guess of the minimum time. If 1, uses as initial min-time estimate the value of lowest flux. 
+                                ;rms     input: average measurement error of individual flux values (in units of the flux values). rms should usually be supplied.     
+                                ;nfold   input: number of foldings on which to perform pairings of flux values, default=5
+                                ;errflag output flag with error-codes. 0: OK, 1: data not equidistant spaced
   
 ;HJD 19nov2019 initial version
 ;  24jan2020   introduced internal offset of input times by value of central time-point (floored to first digit) to avoid numerical
@@ -34,8 +38,11 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr, nfold=nfold, r
 ;  18nov2020  uses now linfit() for linear transform between foldidf and time (more robust against scatter in time vs foldidf)
 ;  18nov2020  kvwcore.pro generated from kvw.pro
 ;  30nov2020  replaced isa() with keyword_set() statements, similar to today's version of kvw.pro
+;  21nov2023   updates in program description in header, code not modified except for order of kw's
 
-
+;Citing this code: Deeg, H.J. 2020, "A Modified Kwee-Van Woerden Method for Eclipse Minimum 
+;                     Timing with Reliable Error Estimates"Galaxies, vol. 9, issue 1, p. 1 
+  
 ;COPYRIGHT (C) 2020 Hans J. Deeg;   
 ;    This program is free software; you can redistribute it and/or modify
 ;    it under the terms of the GNU General Public License as published by
