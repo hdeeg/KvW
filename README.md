@@ -5,19 +5,18 @@ The main programs are `kvw.py` (python).and `kvw.pro` (IDL).
 The python and IDL versions deliver identical numerical results and very similar graphics output.
 
  
-The code requires an input light curve of equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using more than the 3 reflections of KvW's original algorithm, with a default of 5 reflections (`nfold` parameter). The error of the minimum time is calculated following Deeg (2020); the error from KvW's original formula is also provided. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional output text, graphics, as well as several levels of debug information,.
+The code requires an input light curve of equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using more than the 3 reflections of KvW's original algorithm, with a default of 5 reflections (`nfold` parameter). The error of the minimum time is calculated following Deeg (2020); the error from KvW's original formula is also provided. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional text output, graphics, as well as several levels of debug information,.
 
 
 
 ## Execution of the demos:
-	python:
-	In directory with the codes,
-	within IPython or similar interactive environment:
-	`run kvw`
 
-	IDL:
-	From IDL cmd-line in directory with the codes:
-	`IDL> .rnew kvwdemo1`
+python:
+In directory with the codes, within IPython or similar interactive environment: `run kvw`
+
+IDL:
+From IDL cmd-line in directory with the codes:
+`IDL> .rnew kvwdemo1`
 
 
 	The text-output should be in either language:
@@ -29,9 +28,7 @@ The code requires an input light curve of equidistant points that contains only 
 	mintime:   58738.6607358+-0.0000191 orig. KvW error: 0.0000662
 	----------------------------------
 ```
-	From `CMDra7024.lc,` the demos generate also Fig. 1 and first entry 
-	in Table 1 of the paper. From `CMDra7023.lc`, demos will generate 
-	Figs.3 and 4. (Only the IDL version will generate exact reproductions)
+From `CMDra7024.lc,` the demos generate also Fig. 1 and first entry in Table 1 of the paper. From `CMDra7023.lc`, demos will generate Figs.3 and 4. (Only the IDL version will generate exact reproductions)
 
 
 ## Package Content: 
@@ -53,9 +50,7 @@ The code requires an input light curve of equidistant points that contains only 
 	- Primary eclipse at epoch 7024. 
 	- Incomplete primary at epoch 7023;
 	
-	Both lightcurves were extracted from PDCSAP_FLUX of MAST file
-	tess2019253231442-s0016-0000000199574208-0152-s_lc.fits
-	and processed as described in the paper (Deeg 2020).
+	Both lightcurves were extracted from PDCSAP_FLUX of nfile `tess2019253231442-s0016-0000000199574208-0152-s_lc.fits`, available on NASA's MAST and processed as described in the paper (Deeg 2020).
 
 - `*.lc`  Further lightcurves used in tests during development.
 	
