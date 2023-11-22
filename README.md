@@ -18,8 +18,7 @@ IDL:
 From IDL cmd-line in directory with the codes:
 `IDL> .rnew kvwdemo1`
 
-
-	The text-output should be in either language:
+The text-output should be in either language:
 ```
 	infile= CMDra7024.lc
 	mintime:   58739.9291169+-0.0000125 orig. KvW error:       NaN
@@ -33,10 +32,10 @@ From `CMDra7024.lc,` the demos generate also Fig. 1 and first entry in Table 1 o
 
 ## Package Content: 
 
-`python` directory with python code
+`python` Directory with python code
 - 'kvw.py'  code with the main kvw function. Executing `kvw.py` from command line will also provide a demo run, giving minimum times of the CM Dra lightcurves in example_data and generating some figures similar to the paper by Deeg 2020
 
-`IDL`  directory with IDL code 
+`IDL`  Directory with IDL code 
 - `kvw.pro` is the self-contained kvw code
 - `kvwcore.pro` is a plugin replacement for `kvw.pro` in which non-essential code (options for graphics, printing, debugging, time-offset) has been removed. It is provided in order to facilitate translation into other languages.
 - `kvwdemo1.pro` runs a demo of `kvw.pro`, providing minimum times of the lightcurves in example_data and generating some figures from the paper by Deeg 2020
