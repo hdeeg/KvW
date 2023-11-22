@@ -266,6 +266,8 @@ def read_lightcurve(filename):
 ;infile= CMDra7023.lc
 ;mintime:   58738.6607358+-0.0000191 orig. KvW error: 0.0000662
 ;----------------------------------
+;From `CMDra7024.lc,` the code generates also Fig. 1 and the first entry in Table 1 of the paper. 
+;From `CMDra7023.lc`, the code will generate Figs. 3 and 4. (Only the IDL version will generate exact reproductions)
 """
 # Path to the file (you should adjust this to your files' location)
 inpath='../example_data/'
