@@ -1,7 +1,7 @@
 # KvW
 Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2020)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). 
 
-The main programs are `kvw.py` (python).and `kvw.pro` (IDL).
+The main programs are `kvw.py` (python) and `kvw.pro` (IDL).
 The python and IDL versions deliver identical numerical results and very similar graphics output.
 
  
