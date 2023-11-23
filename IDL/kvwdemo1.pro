@@ -1,6 +1,6 @@
 ;pro KVWdemo1
 ; Demonstrator of KvW.pro to determine min-times of two eclipses of CM Dra
-; in TESS light curves, with revised KvW method by Deeg 2020.
+; in TESS light curves, with revised KvW method by Deeg 2021.
 ; The two light curves are:
 ; - Primary eclipse at epoch 7024, generating also Fig 1 and first entry
 ;    in Table 1  

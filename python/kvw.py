@@ -4,13 +4,13 @@ from scipy.optimize import curve_fit
 
 def kvw(time, flux, init_minflux=False, rms=None, nfold=5, notimeoff=False,  noplot=False, noprint=False, debug=0):
     """
-;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error, following Deeg 2020 (Galaxies, vol. 9, issue 1, p. 1)
+;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error, following Deeg 2021, (Galaxies, vol. 9, issue 1, p. 1)
 ;Data-points that are equidistant in time are required and the lightcurve should only contain the eclipse (no off-eclipse data).
 ;For the initial guess of the minimum time, two options are given, controlled by the keyword init_minflux : By default (init_minflux=0), the middle of 
 ;the lightcurve is assumed. Else (init_minflux=1), the time of the flux-minimum is used. This option is fine or preferential for low-noise lightcurves showing 
 ;a clear flux-mimimum not extending over more than 2-3 points. 
 ;If the rms (point-to-point noise) of the off-eclipse flux is known, it should be supplied by keyword rms. Else, rms is estimated from S of the best 
-; flux-pairing, which is assumed to be dominated by flux measurement errors. For details on calculation of that rms, see Deeg 2020. 
+; flux-pairing, which is assumed to be dominated by flux measurement errors. For details on calculation of that rms, see Deeg 2021. 
 ;By default, the time of minimum is derived from 5 pairings (nfold paramter) that fold at i-1,i-0.5,i,i+0.5,i+1, where i is the index of the point of minimum 
 ; flux. The original KvW algorithm uses nfold=3.
 
@@ -19,7 +19,7 @@ def kvw(time, flux, init_minflux=False, rms=None, nfold=5, notimeoff=False,  nop
     ;flux   vector with corresponding flux values
 ;output 
     ;tuple with 4 values: 
-    ;time of mimimum, error of minimum (method by Deeg 2020), error of minimum (KvW's orignal method), and error-code.
+    ;time of mimimum, error of minimum (method by Deeg 2021), error of minimum (KvW's orignal method), and error-code.
     ;error-codes: 0: OK, data are equidistant within 1% against medium spacing.  1: data not equidistantly spaced
 
 ;keywords
@@ -33,13 +33,13 @@ def kvw(time, flux, init_minflux=False, rms=None, nfold=5, notimeoff=False,  nop
     ;debug   input: debugging flag. If 1, prints some, if 2, prints lots, if 3 even more intermediate values
  
   HJD 16nov2023:  First version of kvw.py, translated from kvw.pro version 15nov2023 using Chatgpt4. 
-      21nov2023: Revised code that delivers identical numerical results as IDL code kvw.pro (ecxept for graphics, which are simpler)
-
+    21nov2023: Revised code that delivers identical numerical results as IDL code kvw.pro (ecxept for graphics, which are simpler)
+    23nov2023  fixed the citation of Deeg 2021 paper
 ;
-;CITING this code: Deeg, H.J. 2020, "A Modified Kwee-Van Woerden Method for Eclipse Minimum 
+;CITING this code: Deeg, H.J. 2021, "A Modified Kwee-Van Woerden Method for Eclipse Minimum 
 ;                     Timing with Reliable Error Estimates"Galaxies, vol. 9, issue 1, p. 1     
       
-;COPYRIGHT (C) 2023 Hans J. Deeg;   
+;COPYRIGHT (C) 2020, 2023 Hans J. Deeg;   
 ;    This program is free software; you can redistribute it and/or modify
 ;    it under the terms of the GNU General Public License as published by
 ;    the Free Software Foundation; either version 2 of the License, or
@@ -246,7 +246,7 @@ def read_lightcurve(filename):
 #
 """
 ; Demonstrator of KvW.pro to determine min-times of two eclipses of CM Dra
-; in TESS light curves, with revised KvW method by Deeg 2020.
+; in TESS light curves, with revised KvW method by Deeg 2021.
 ; The two light curves are:
 ; - Primary eclipse at epoch 7024, generating also Fig 1 and first entry
 ;    in Table 1  
@@ -256,7 +256,7 @@ def read_lightcurve(filename):
 ;
 ;both curves were extracted from PDCSAP_FLUX of MAST file
 ;tess2019253231442-s0016-0000000199574208-0152-s_lc.fits
-;and processed as described in the paper (Deeg 2020)
+;and processed as described in the paper (Deeg 2021)
 
 ;Executing this code,  (in ipython: 'run kvw') 
 ;the text-output should be:
@@ -279,7 +279,7 @@ for lc in infile:
     # Read the data
     time, flux = read_lightcurve(lc)
 
-    #rms of off-eclipse data, determined from revision of all Sector 16  CM Dra eclipses, see paper Deeg 2020
+    #rms of off-eclipse data, determined from revision of all Sector 16  CM Dra eclipses, see paper Deeg 2021
     rms=0.00138   
     
     # Apply the kvw function

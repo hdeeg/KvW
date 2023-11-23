@@ -3,13 +3,13 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr,  init_minflux=
 ;kvwcor.pro is a plugin replacement for kvw.pro in which non-essential code (options for graphics, printing, debugging, time-offset)
 ;has been removed
 
-;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error, following Deeg 2020 (Galaxies, vol. 9, issue 1, p. 1)
+;Returns eclipse mid (minimum)-time using the Kwee Van-Woerden (1956) method with revised timing error, following Deeg 2021 (Galaxies, vol. 9, issue 1, p. 1)
 ;Data-points that are equidistant in time are required and the lightcurve should only contain the eclipse (no off-eclipse data).
 ;For the initial guess of the minimum time, two options are given, controlled by the keyword init_minflux : By default (init_minflux=0), the middle of 
 ;the lightcurve is assumed. Else (init_minflux=1), the time of the flux-minimum is used. This option is fine or preferential for low-noise lightcurves showing 
 ;a clear flux-mimimum not extending over more than 2-3 points. 
 ;If the rms (point-to-point noise) of the off-eclipse flux is known, it should be supplied by keyword rms. Else, rms is estimated from S of the best 
-; flux-pairing, which is assumed to be dominated by flux measurement errors. For details on calculation of that rms, see Deeg 2020. 
+; flux-pairing, which is assumed to be dominated by flux measurement errors. For details on calculation of that rms, see Deeg 2021. 
 ;By default, the time of minimum is derived from 5 pairings (nfold paramter) that fold at i-1,i-0.5,i,i+0.5,i+1, where i is the index of the point of minimum 
 ; flux. The original KvW algorithm uses nfold=3.
   
@@ -21,7 +21,7 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr,  init_minflux=
                                 ;time of mimimum
 
 ;keywords
-                                ;minerr  output: error of the minimum time, method by Deeg+ 2020
+                                ;minerr  output: error of the minimum time, method by Deeg 2021
                                 ;kvwminerr  output: error of the minimum time, original method by KvW 1956
                                 ;init_minflux input: By default, the middle of the lightcurve is used as
                                 ;        intial guess of the minimum time. If 1, uses as initial min-time estimate the value of lowest flux. 
@@ -39,11 +39,12 @@ function kvwcore, time, flux, minerr=minerr, kvwminerr=kvwminerr,  init_minflux=
 ;  18nov2020  kvwcore.pro generated from kvw.pro
 ;  30nov2020  replaced isa() with keyword_set() statements, similar to today's version of kvw.pro
 ;  21nov2023   updates in program description in header, code not modified except for order of kw's
+;  23nov2023  fixed the citation of Deeg 2021 paper
 
-;Citing this code: Deeg, H.J. 2020, "A Modified Kwee-Van Woerden Method for Eclipse Minimum 
+;Citing this code: Deeg, H.J. 2021, "A Modified Kwee-Van Woerden Method for Eclipse Minimum 
 ;                     Timing with Reliable Error Estimates"Galaxies, vol. 9, issue 1, p. 1 
   
-;COPYRIGHT (C) 2020 Hans J. Deeg;   
+;COPYRIGHT (C) 2020, 2023 Hans J. Deeg;   
 ;    This program is free software; you can redistribute it and/or modify
 ;    it under the terms of the GNU General Public License as published by
 ;    the Free Software Foundation; either version 2 of the License, or
