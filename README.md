@@ -1,5 +1,5 @@
 # KvW
-Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). 
+Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). This improvement avoids underestimated errors in minimum times that may appear with Kwee & Van Woerden's (1956) original method. This is particularly the case for low-noise eclipse or transit lightcurves from space or from modern ground instrumentation, where the original KvW method may even result in numerical faults.   
 
 The main programs are `kvw.py` (python) and `kvw.pro` (IDL).
 The python and IDL versions deliver identical numerical results and very similar graphics output.
