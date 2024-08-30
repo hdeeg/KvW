@@ -1,11 +1,11 @@
 # KvW
-Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). This improvement avoids underestimated errors in minimum times that may appear with Kwee & Van Woerden's (1956) original method. This is particularly the case for low-noise eclipse or transit lightcurves from space or from modern ground instrumentation, where the original KvW method may even result in numerical faults.   
+Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). This improvement avoids underestimated errors in minimum times that may appear with Kwee & Van Woerden's (1956) original method. Errouneous error-estimates (or even numerical faults) using KvW's original prescription are prevalent for low-noise eclipse or transit lightcurves, the way they can be achieved from space or from modern ground instrumentation. The failures become pronouced when the noise between subsequent points is smaller than the flux-variation due to eclipse in/egress between subsequent points.
 
 The main programs are `kvw.py` (python) and `kvw.pro` (IDL).
 The python and IDL versions deliver identical numerical results and very similar graphics output.
 
  
-The code requires an input light curve of near-equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using more than the 3 reflections of KvW's original algorithm, with a default of 5 reflections (`nfold` parameter). The error of the minimum time is calculated following Deeg (2021); the error from KvW's original formula is also provided. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional text output, graphics, as well as several levels of debug information.
+The code requires an input light curve of near-equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary; the code can also attempt to estimate it). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using a default of 5 reflections (`nfold` parameter; KvW's original uses 3 reflections). The error of the minimum time is calculated following [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract); the error-estimate from KvW's original formula is also provided by the code. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional text output, graphics, as well as several levels of debug information.
 
 
 
@@ -27,7 +27,7 @@ The text-output should be in either language:
 	mintime:   58738.6607358+-0.0000191 orig. KvW error: 0.0000662
 	----------------------------------
 ```
-From `CMDra7024.lc,` the demos generate also Fig. 1 and the first entry in Table 1 of the paper. From `CMDra7023.lc`, the demos will generate Figs. 3 and 4. (Only the IDL version will generate exact reproductions)
+From `CMDra7024.lc,` the demos generate also Fig. 1 and the first entry in Table 1 of the paper by Deeg (2021). From `CMDra7023.lc`, the demos will generate Figs. 3 and 4. (Only the IDL version will generate exact reproductions)
 
 
 ## Package Content: 
@@ -39,15 +39,15 @@ From `CMDra7024.lc,` the demos generate also Fig. 1 and the first entry in Table
 - `kvw.pro` is the self-contained kvw code
 - `kvwcore.pro` is a plugin replacement for `kvw.pro` in which non-essential code (options for graphics, printing, debugging, time-offset) has been removed. It is provided in order to facilitate translation into other languages.
 - `kvwdemo1.pro` runs a demo of `kvw.pro`, providing minimum times of the lightcurves in example_data and generating some figures from the paper by Deeg 2021
-- `rdtab.pro`  is a table-reader that used by kvwdemo1.pro
+- `rdtab.pro`  is a table-reader that is used by kvwdemo1.pro
 
 
 `example_data`:
-- `CMDra7023.lc` and `CMDra7024.lc`  Lightcurves of CM Dra eclipses,
+- `CMDra7023.lc` and `CMDra7024.lc`  Lightcurves of CM Dra eclipses from the TESS mission,
  	used by demos in kvw.py or kvwdemo1.pro.
 	These curves are:
-	- Primary eclipse at epoch 7024. 
-	- Incomplete primary at epoch 7023;
+	- An incomplete primary eclipse at epoch 7023
+	- A complete primary eclipse at epoch 7024
 	
 	Both lightcurves were extracted from the PDCSAP_FLUX of the file `tess2019253231442-s0016-0000000199574208-0152-s_lc.fits`, available on NASA's MAST and processed as described in the paper (Deeg 2021).
 
