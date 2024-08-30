@@ -1,11 +1,11 @@
 # KvW
-Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). This improvement avoids underestimated errors in minimum times that may appear with Kwee & Van Woerden's (1956) original method. Errouneous error-estimates (or even numerical faults) using KvW's original prescription are prevalent for low-noise eclipse or transit lightcurves, the way they can be achieved from space or from modern ground instrumentation. The failures become pronouced when the noise between subsequent points is smaller than the flux-variation due to eclipse in/egress between subsequent points.
+Kwee Van Woerden (KvW) method for eclipse or transit minimum timing, with improved error calculation, as described in [Deeg (2020)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). This improvement avoids underestimated errors in minimum times that may appear with Kwee & Van Woerden's (1956) original method. Errouneous error-estimates (or even numerical faults) using KvW's original prescription are prevalent for low-noise eclipse or transit lightcurves, the way they can be achieved from space or from modern ground instrumentation. The failures become pronouced when the noise between subsequent points is smaller than the flux-variation due to eclipse in/egress between subsequent points.
 
 The main programs are `kvw.py` (python) and `kvw.pro` (IDL).
 The python and IDL versions deliver identical numerical results and very similar graphics output.
 
  
-The code requires an input light curve of near-equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary; the code can also attempt to estimate it). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using a default of 5 reflections (`nfold` parameter; KvW's original uses 3 reflections). The error of the minimum time is calculated following [Deeg (2021)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract); the error-estimate from KvW's original formula is also provided by the code. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional text output, graphics, as well as several levels of debug information.
+The code requires an input light curve of near-equidistant points that contains only the eclipse, without any off-eclipse points. A value for the rms (noise) of the input light curve is also requested (but not necessary; the code can also attempt to estimate it). The eclipse minimum time is obtained using KvW's original method [(Kwee & Van Woerden 1956)](https://ui.adsabs.harvard.edu/abs/1956BAN....12..327K/abstract), but using a default of 5 reflections (`nfold` parameter; KvW's original uses 3 reflections). The error of the minimum time is calculated following [Deeg (2020)](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract); the error-estimate from KvW's original formula is also provided by the code. Both IDL and phython codes are functions that return the eclipse minimum time with its error; they also provide optional text output, graphics, as well as several levels of debug information.
 
 
 
@@ -55,6 +55,6 @@ From `CMDra7024.lc,` the demos generate also Fig. 1 and the first entry in Table
 	
  
 ## Citing the KvW code
-The preferred way is by citing [Deeg, H.J. 2021, "A Modified Kwee-Van Woerden Method for Eclipse Minimum Timing with Reliable Error Estimates", Galaxies, vol. 9, issue 1, p. 1](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). 
+The preferred way is by citing [Deeg, H.J. 2020, "A Modified Kwee-Van Woerden Method for Eclipse Minimum Timing with Reliable Error Estimates", Galaxies, vol. 9, issue 1, p. 1](https://ui.adsabs.harvard.edu/abs/2020Galax...9....1D/abstract). 
 
 
